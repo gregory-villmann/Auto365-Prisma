@@ -9,8 +9,8 @@ carsRoute.get('/', async (req, res) => {
 	try {
 		const { pageIndex, pageSize } = req.query;
 		const skip = pageIndex >= 0 ? pageIndex * pageSize : 0;
-		const carsLength = await prisma.cars.count();
-		const cars = await prisma.cars.findMany({
+		const carsLength = await prisma.car.count();
+		const cars = await prisma.car.findMany({
 			select: {
 				id: true,
 				make: true,
@@ -34,7 +34,7 @@ carsRoute.get('/:id', async (req, res) => {
 	const { id } = req.params;
 
 	try {
-		const car = await prisma.cars.findUnique({
+		const car = await prisma.car.findUnique({
 			where: {
 				id: parseInt(id),
 			},
@@ -56,7 +56,7 @@ carsRoute.post('/new', async (req, res) => {
 	const { make, model, year, mileage, price, image } = req.body;
 
 	try {
-		const car = await prisma.cars.create({
+		const car = await prisma.car.create({
 			data: {
 				make,
 				model,
@@ -80,7 +80,7 @@ carsRoute.put('/:id', async (req, res) => {
 	const { make, model, year, mileage, price, image } = req.body;
 
 	try {
-		const car = await prisma.cars.update({
+		const car = await prisma.car.update({
 			where: {id},
 			data: {
 				make,
@@ -103,7 +103,7 @@ carsRoute.put('/:id', async (req, res) => {
 carsRoute.delete('/:id', async (req, res) => {
 	const id = parseInt(req.params.id);
 	try {
-		const deletedCar = await prisma.cars.delete({
+		const deletedCar = await prisma.car.delete({
 			where: { id },
 		});
 

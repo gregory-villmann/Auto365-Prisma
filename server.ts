@@ -4,6 +4,7 @@ import { carsRoute } from './routes/cars';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from "body-parser";
 import * as swaggerDocument from './swagger.json';
+import { registrationRoute } from './routes/registration';
 
 const server: Express = express();
 
@@ -13,6 +14,7 @@ server.use(bodyParser.json());
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 server.use('/cars', carsRoute);
+server.use('/register', registrationRoute)
 
 server.use((err, res) => {
     console.error(err);
