@@ -50,3 +50,26 @@ carsRoute.get('/:id', async (req, res) => {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 });
+
+// POST /cars/new - create a new car
+carsRoute.post('/new', async (req, res) => {
+	const { make, model, year, mileage, price, image } = req.body;
+
+	try {
+		const car = await prisma.cars.create({
+			data: {
+				make,
+				model,
+				year: parseInt(year),
+				mileage: parseInt(mileage),
+				price: parseInt(price),
+				image,
+			},
+		});
+
+		res.status(201).json(car);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+});
