@@ -98,3 +98,18 @@ carsRoute.put('/:id', async (req, res) => {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 });
+
+// DELETE /cars/:id - Delete a car with the given ID
+carsRoute.delete('/:id', async (req, res) => {
+	const id = parseInt(req.params.id);
+	try {
+		const deletedCar = await prisma.cars.delete({
+			where: { id },
+		});
+
+		res.status(200).json(deletedCar);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+});
