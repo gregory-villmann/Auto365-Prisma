@@ -12,11 +12,7 @@ server.use(bodyParser.json());
 
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
-server.use('/test', carsRoute);
-
-server.get('/', (req, res) => {
-    res.send('Well done buddy!!!');
-})
+server.use('/cars', carsRoute);
 
 server.use((err, res) => {
     console.error(err);

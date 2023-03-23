@@ -1,60 +1,154 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.0",
   "info": {
-    "title": "Auto365 REST API Swagger Documentation",
+    "title": "Cars API",
+    "description": "API for managing cars",
     "version": "1.0.0"
   },
-  "schemes": ["http"],
-  "servers": [{ "url": "http://localhost:3000/" }],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
   "paths": {
-    "/example": {
-      "post": {
-        "tags": ["ExampleEndpoints"],
-        "summary": "Send a text to the server",
-        "description": "Send a message to the server and get a response added to the original text.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExampleSchemaHeader"
-              }
+    "/cars": {
+      "get": {
+        "summary": "Get all cars with pagination",
+        "parameters": [
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
             }
           }
-        },
+        ],
         "responses": {
-          "201": {
-            "description": "Success",
+          "200": {
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExampleSchemaBody"
+                  "type": "object",
+                  "properties": {
+                    "cars": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "make": {
+                            "type": "string"
+                          },
+                          "model": {
+                            "type": "string"
+                          },
+                          "year": {
+                            "type": "integer"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "image": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "make",
+                          "model",
+                          "year",
+                          "price",
+                          "image"
+                        ]
+                      }
+                    },
+                    "size": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "cars",
+                    "size"
+                  ]
                 }
               }
             }
           },
-          "404": { "description": "Not found" },
-          "500": { "description": "Internal server error" }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "ExampleSchemaBody": {
-        "properties": {
-          "responseText": {
-            "type": "string",
-            "example": "This is some example string! This is an endpoint"
+          "500": {
+            "description": "Internal server error"
           }
         }
-      },
-      "ExampleSchemaHeader": {
-        "required": ["text"],
-        "properties": {
-          "text": {
-            "type": "string",
-            "example": "This is some example string!"
+      }
+    },
+    "/cars/{id}": {
+      "get": {
+        "summary": "Get a specific car by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "make": {
+                      "type": "string"
+                    },
+                    "model": {
+                      "type": "string"
+                    },
+                    "year": {
+                      "type": "integer"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "make",
+                    "model",
+                    "year",
+                    "price",
+                    "image"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Car not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
