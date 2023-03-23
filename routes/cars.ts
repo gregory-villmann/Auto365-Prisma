@@ -73,3 +73,28 @@ carsRoute.post('/new', async (req, res) => {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 });
+
+// PUT /cars/:id - edit a existing car
+carsRoute.put('/:id', async (req, res) => {
+	const id = parseInt(req.params.id)
+	const { make, model, year, mileage, price, image } = req.body;
+
+	try {
+		const car = await prisma.cars.update({
+			where: {id},
+			data: {
+				make,
+				model,
+				year: parseInt(year),
+				mileage: parseInt(mileage),
+				price: parseInt(price),
+				image,
+			},
+		});
+
+		res.status(200).json(car)
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Internal server error' });
+	}
+});
