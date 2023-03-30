@@ -17,24 +17,25 @@ sessionsRoute.post('/', async (req, res) => {
 
 	const isPwValid = await isPasswordValid(email, password);
 	if (isPwValid) {
-		const userId = await prisma.user.findUnique({
+		const user = await prisma.user.findUnique({
 			where: {
 				email: email,
 			},
 			select: {
-				id: true
+				id: true,
+				firstName: true
 			}
 		});
 
 		const uuid = uuidv4();
-		if (userId) {
+		if (user) {
 			await prisma.session.create({
 				data: {
 					id: 'Bearer ' + uuid,
-					userId: userId.id
+					userId: user.id
 				}
 			});
-			res.status(200).json({uuid: 'Bearer ' + uuid});
+			res.status(200).json({firstName: user.firstName, uuid: 'Bearer ' + uuid});
 		}
 	} else {
 		res.status(500).json({errorMessage: 'Valideerimine ebaõnnestus'});

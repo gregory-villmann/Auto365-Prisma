@@ -19,32 +19,33 @@ const prisma = new client_1.PrismaClient();
 exports.sessionsRoute = (0, express_1.Router)();
 exports.sessionsRoute.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    if (email === "" || password === "") {
-        return res.status(500).json({ errorMessage: "Email or Password is empty" });
+    if (email === '' || password === '') {
+        return res.status(500).json({ errorMessage: 'Email or Password is empty' });
     }
     const isPwValid = yield (0, verifyPassword_1.isPasswordValid)(email, password);
     if (isPwValid) {
-        const userId = yield prisma.user.findUnique({
+        const user = yield prisma.user.findUnique({
             where: {
                 email: email,
             },
             select: {
-                id: true
+                id: true,
+                firstName: true
             }
         });
         const uuid = (0, uuid_1.v4)();
-        if (userId) {
+        if (user) {
             yield prisma.session.create({
                 data: {
                     id: 'Bearer ' + uuid,
-                    userId: userId.id
+                    userId: user.id
                 }
             });
-            res.status(200).json({ uuid: 'Bearer ' + uuid });
+            res.status(200).json({ firstName: user.firstName, uuid: 'Bearer ' + uuid });
         }
     }
     else {
-        res.status(500).json({ errorMessage: "Valideerimine ebaõnnestus" });
+        res.status(500).json({ errorMessage: 'Valideerimine ebaõnnestus' });
     }
 }));
 exports.sessionsRoute.delete('', auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
