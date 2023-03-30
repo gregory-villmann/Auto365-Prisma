@@ -23,10 +23,17 @@ model Car {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
-  email     String @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   firstName String
   lastName  String
   password  String
   Car       Car[]
+  Session   Session[]
+}
+
+model Session {
+  id     String @unique
+  userId Int
+  User   User? @relation(fields: [userId], references: [id])
 }

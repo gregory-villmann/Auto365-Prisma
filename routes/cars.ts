@@ -7,8 +7,8 @@ export const carsRoute = Router();
 // GET /cars - get all cars with pagination
 carsRoute.get('/', async (req, res) => {
 	try {
-		const { pageIndex, pageSize } = req.query;
-		const skip = pageIndex >= 0 ? pageIndex * pageSize : 0;
+		let {pageIndex, pageSize} = req.query;
+		const skip = Number(pageIndex) >= 0 ? Number(pageIndex) * Number(pageSize) : 0;
 		const carsLength = await prisma.car.count();
 		const cars = await prisma.car.findMany({
 			select: {
@@ -20,7 +20,7 @@ carsRoute.get('/', async (req, res) => {
 				image: true
 			},
 			skip,
-			take: parseInt(pageSize),
+			take: Number(pageSize),
 		});
 		res.status(200).json({cars:cars, size: carsLength});
 	} catch (error) {
@@ -64,6 +64,7 @@ carsRoute.post('/new', async (req, res) => {
 				mileage: parseInt(mileage),
 				price: parseInt(price),
 				image,
+				userId: 1
 			},
 		});
 
