@@ -4,3 +4,4 @@ node_modules
 # Project exclude paths
 /routes/cars.js
 /server.js
+/certs/server.key
