@@ -43,7 +43,7 @@ sessionsRoute.post('/', async (req, res) => {
 })
 
 sessionsRoute.delete('', auth, async (req, res) => {
-	const token = req.header('token');
+	const token = req.header('Authorization');
 	try {
 		await prisma.session.delete({
 			where: {

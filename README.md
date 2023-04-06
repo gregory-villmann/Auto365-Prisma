@@ -12,7 +12,6 @@ here: https://github.com/gregory-villmann/Cars365-FE/
 
 * Make sure that your Node.js version is v18.12.1 or newer
     * You can verify your Node version by running `node -v` in cmd :)
-* Also verify that you have Sqlite installed on your computer
 
 1. In project root run `npm install` to install dependencies
 2. Then run `npx prisma generate`, to generate the prisma schema

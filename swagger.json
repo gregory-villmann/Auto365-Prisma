@@ -10,16 +10,27 @@
       "url": "http://localhost:3000"
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
   "paths": {
     "/cars": {
       "get": {
         "summary": "Get all cars with pagination",
-        "tags": ["Car"],
+        "tags": [
+          "Car"
+        ],
         "parameters": [
           {
             "name": "pageIndex",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "integer"
             }
@@ -27,7 +38,7 @@
           {
             "name": "pageSize",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "integer"
             }
@@ -38,6 +49,54 @@
             "description": "Successful response",
             "content": {
               "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cars": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "make": {
+                            "type": "string"
+                          },
+                          "model": {
+                            "type": "string"
+                          },
+                          "year": {
+                            "type": "integer"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "image": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "make",
+                          "model",
+                          "year",
+                          "price",
+                          "image"
+                        ]
+                      }
+                    },
+                    "size": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "cars",
+                    "size"
+                  ]
+                }
+              },
+              "application/xml": {
                 "schema": {
                   "type": "object",
                   "properties": {
@@ -143,6 +202,39 @@
                     "image"
                   ]
                 }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "make": {
+                      "type": "string"
+                    },
+                    "model": {
+                      "type": "string"
+                    },
+                    "year": {
+                      "type": "integer"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "make",
+                    "model",
+                    "year",
+                    "price",
+                    "image"
+                  ]
+                }
               }
             }
           },
@@ -156,7 +248,14 @@
       },
       "put": {
         "summary": "Update a specific car by ID",
-        "tags": ["Car"],
+        "tags": [
+          "Car"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -251,7 +350,14 @@
       },
       "delete": {
         "summary": "Delete a specific car by ID",
-        "tags": ["Car"],
+        "tags": [
+          "Car"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -310,7 +416,14 @@
     "/cars/new": {
       "post": {
         "summary": "Create a new car",
-        "tags": ["Car"],
+        "tags": [
+          "Car"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -334,9 +447,6 @@
                   },
                   "image": {
                     "type": "string"
-                  },
-                  "userId": {
-                    "type": "integer"
                   }
                 },
                 "required": [
@@ -345,8 +455,7 @@
                   "year",
                   "mileage",
                   "price",
-                  "image",
-                  "userId"
+                  "image"
                 ]
               }
             }
@@ -525,43 +634,15 @@
         }
       },
       "delete": {
-        "description": "Delete session when logging out",
+        "summary": "Delete session when logging out",
         "tags": [
           "Sessions"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "description": "An authentication token in the format 'Bearer XXX'",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "bearerAuth": []
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "email",
-                  "password"
-                ]
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "202": {
             "description": "Session deleted"

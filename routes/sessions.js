@@ -49,7 +49,7 @@ exports.sessionsRoute.post('/', (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 exports.sessionsRoute.delete('', auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.header('token');
+    const token = req.header('Authorization');
     try {
         yield prisma.session.delete({
             where: {
