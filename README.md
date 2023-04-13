@@ -14,8 +14,11 @@ here: https://github.com/gregory-villmann/Cars365-FE/
     * You can verify your Node version by running `node -v` in cmd :)
 
 1. In project root run `npm install` to install dependencies
-2. Then run `npx prisma generate`, to generate the prisma schema
-3. Then run `npm run build` to build the project
+2. Generate .key and .crt files to enable HTTPS
+    * Run `openssl genrsa -out ./certs/server.key 2048`
+    * Run `openssl x509 -req -in ./certs/server.csr -signkey ./certs/server.key -out ./certs/server.crt`
+3. Then run `npx prisma generate`, to generate the prisma schema
+4. Then run `npm run build` to build the project
 
 ## Development server
 
