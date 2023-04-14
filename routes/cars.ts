@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { auth } from '../middleware/auth';
 import xml2js from 'xml2js';
+import { requestLogger } from '../middleware/requestLogger';
 
 const prisma = new PrismaClient();
 export const carsRoute = Router();
@@ -76,7 +77,7 @@ carsRoute.get('/:id', async (req, res) => {
 });
 
 // POST /cars/new - create a new car
-carsRoute.post('/new', auth, async (req, res) => {
+carsRoute.post('/new', auth, requestLogger, async (req, res) => {
 	const {make, model, year, mileage, price, image} = req.body;
 
 	try {
@@ -100,7 +101,7 @@ carsRoute.post('/new', auth, async (req, res) => {
 });
 
 // PUT /cars/:id - edit a existing car
-carsRoute.put('/:id', auth, async (req, res) => {
+carsRoute.put('/:id', auth, requestLogger, async (req, res) => {
 	const id = parseInt(req.params.id);
 	const {make, model, year, mileage, price, image} = req.body;
 
@@ -125,7 +126,7 @@ carsRoute.put('/:id', auth, async (req, res) => {
 });
 
 // DELETE /cars/:id - Delete a car with the given ID
-carsRoute.delete('/:id', auth, async (req, res) => {
+carsRoute.delete('/:id', auth, requestLogger, async (req, res) => {
 	const id = parseInt(req.params.id);
 	try {
 		const deletedCar = await prisma.car.delete({

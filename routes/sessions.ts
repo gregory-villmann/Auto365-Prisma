@@ -3,11 +3,12 @@ import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { auth } from '../middleware/auth';
 import { isPasswordValid } from '../utils/verifyPassword';
+import { requestLogger } from '../middleware/requestLogger';
 
 const prisma = new PrismaClient();
 export const sessionsRoute = Router();
 
-sessionsRoute.post('/', async (req, res) => {
+sessionsRoute.post('/', requestLogger, async (req, res) => {
 
 	const {email, password} = req.body;
 
@@ -42,7 +43,7 @@ sessionsRoute.post('/', async (req, res) => {
 	}
 })
 
-sessionsRoute.delete('', auth, async (req, res) => {
+sessionsRoute.delete('', auth, requestLogger, async (req, res) => {
 	const token = req.header('Authorization');
 	try {
 		await prisma.session.delete({

@@ -5,3 +5,5 @@ node_modules
 /routes/cars.js
 /server.js
 /certs/server.key
+/certs/server.crt
+/logs/requests.log
