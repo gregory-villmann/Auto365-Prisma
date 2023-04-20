@@ -101,53 +101,142 @@
                   "type": "object",
                   "properties": {
                     "cars": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "integer"
-                          },
-                          "make": {
-                            "type": "string"
-                          },
-                          "model": {
-                            "type": "string"
-                          },
-                          "year": {
-                            "type": "integer"
-                          },
-                          "price": {
-                            "type": "number"
-                          },
-                          "image": {
-                            "type": "string"
+                      "type": "object",
+                      "properties": {
+                        "car": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "make": {
+                                "type": "string"
+                              },
+                              "model": {
+                                "type": "string"
+                              },
+                              "year": {
+                                "type": "integer"
+                              },
+                              "price": {
+                                "type": "integer"
+                              },
+                              "image": {
+                                "type": "string"
+                              }
+                            }
                           }
-                        },
-                        "required": [
-                          "id",
-                          "make",
-                          "model",
-                          "year",
-                          "price",
-                          "image"
-                        ]
+                        }
                       }
                     },
                     "size": {
                       "type": "integer"
                     }
                   },
-                  "required": [
-                    "cars",
-                    "size"
-                  ]
+                  "xml": {
+                    "name": "root"
+                  }
                 }
               }
             }
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new car",
+        "tags": [
+          "Car"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "make": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "integer"
+                  },
+                  "mileage": {
+                    "type": "integer"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "image": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "make",
+                  "model",
+                  "year",
+                  "mileage",
+                  "price",
+                  "image"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Car created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "make": {
+                      "type": "string"
+                    },
+                    "model": {
+                      "type": "string"
+                    },
+                    "year": {
+                      "type": "integer"
+                    },
+                    "mileage": {
+                      "type": "integer"
+                    },
+                    "price": {
+                      "type": "integer"
+                    },
+                    "image": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error, car not created"
+          },
+          "400": {
+            "description": "Missing auth header"
           }
         }
       }
@@ -186,11 +275,17 @@
                     "year": {
                       "type": "integer"
                     },
+                    "mileage": {
+                      "type": "integer"
+                    },
                     "price": {
                       "type": "number"
                     },
                     "image": {
                       "type": "string"
+                    },
+                    "userId": {
+                      "type": "integer"
                     }
                   },
                   "required": [
@@ -198,8 +293,10 @@
                     "make",
                     "model",
                     "year",
+                    "mileage",
                     "price",
-                    "image"
+                    "image",
+                    "userId"
                   ]
                 }
               },
@@ -219,21 +316,22 @@
                     "year": {
                       "type": "integer"
                     },
+                    "mileage": {
+                      "type": "integer"
+                    },
                     "price": {
-                      "type": "number"
+                      "type": "integer"
                     },
                     "image": {
                       "type": "string"
+                    },
+                    "userId": {
+                      "type": "integer"
                     }
                   },
-                  "required": [
-                    "id",
-                    "make",
-                    "model",
-                    "year",
-                    "price",
-                    "image"
-                  ]
+                  "xml": {
+                    "name": "root"
+                  }
                 }
               }
             }
@@ -329,6 +427,9 @@
                     },
                     "image": {
                       "type": "string"
+                    },
+                    "userId": {
+                      "type": "integer"
                     }
                   },
                   "required": [
@@ -337,7 +438,8 @@
                     "model",
                     "year",
                     "price",
-                    "image"
+                    "image",
+                    "userId"
                   ]
                 }
               }
@@ -345,6 +447,9 @@
           },
           "500": {
             "description": "Internal server error"
+          },
+          "400": {
+            "description": "Missing auth header"
           }
         }
       },
@@ -393,6 +498,9 @@
                     },
                     "image": {
                       "type": "string"
+                    },
+                    "userId": {
+                      "type": "integer"
                     }
                   },
                   "required": [
@@ -401,7 +509,8 @@
                     "model",
                     "year",
                     "price",
-                    "image"
+                    "image",
+                    "userId"
                   ]
                 }
               }
@@ -409,104 +518,18 @@
           },
           "500": {
             "description": "Internal server error"
+          },
+          "400": {
+            "description": "Missing auth header"
           }
         }
       }
     },
-    "/cars/new": {
-      "post": {
-        "summary": "Create a new car",
-        "tags": [
-          "Car"
-        ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "make": {
-                    "type": "string"
-                  },
-                  "model": {
-                    "type": "string"
-                  },
-                  "year": {
-                    "type": "integer"
-                  },
-                  "mileage": {
-                    "type": "integer"
-                  },
-                  "price": {
-                    "type": "integer"
-                  },
-                  "image": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "make",
-                  "model",
-                  "year",
-                  "mileage",
-                  "price",
-                  "image"
-                ]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Car created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "make": {
-                      "type": "string"
-                    },
-                    "model": {
-                      "type": "string"
-                    },
-                    "year": {
-                      "type": "integer"
-                    },
-                    "mileage": {
-                      "type": "integer"
-                    },
-                    "price": {
-                      "type": "integer"
-                    },
-                    "image": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error, car not created"
-          }
-        }
-      }
-    },
-    "/register": {
+    "/users": {
       "post": {
         "summary": "Create a new user",
         "tags": [
-          "Registration"
+          "Users"
         ],
         "requestBody": {
           "content": {
@@ -644,14 +667,17 @@
           }
         ],
         "responses": {
-          "202": {
+          "204": {
             "description": "Session deleted"
           },
-          "404": {
-            "description": "Error"
+          "400": {
+            "description": "Missing auth header"
           },
           "401": {
             "description": "Session not found"
+          },
+          "404": {
+            "description": "Error"
           }
         }
       }

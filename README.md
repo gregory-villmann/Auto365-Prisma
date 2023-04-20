@@ -19,11 +19,12 @@ here: https://github.com/gregory-villmann/Cars365-FE/
     * Run `openssl x509 -req -in ./certs/server.csr -signkey ./certs/server.key -out ./certs/server.crt`
 3. Then run `npx prisma generate`, to generate the prisma schema
 4. Then run `npm run build` to build the project
+5. Then visit https://localhost:3000 and accept that the "connection is not private"
 
 ## Development server
 
-Run `npm run start` to start the server at http://localhost:3000.
+Run `npm run start` to start the server at https://localhost:3000
 
 ## Documentation
 
-To see Swagger documentation visit http://localhost:3000/api-docs/
+To see Swagger documentation visit https://localhost:3000/api-docs/

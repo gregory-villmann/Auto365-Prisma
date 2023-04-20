@@ -77,7 +77,7 @@ carsRoute.get('/:id', async (req, res) => {
 });
 
 // POST /cars/new - create a new car
-carsRoute.post('/new', auth, requestLogger, async (req, res) => {
+carsRoute.post('', auth, requestLogger, async (req, res) => {
 	const {make, model, year, mileage, price, image} = req.body;
 
 	try {

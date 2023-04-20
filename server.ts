@@ -23,7 +23,7 @@ server.use(bodyParser.json());
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 server.use('/logs', logsRoute);
 server.use('/cars', carsRoute);
-server.use('/register', registrationRoute);
+server.use('/users', registrationRoute);
 server.use('/sessions', sessionsRoute);
 
 server.use((err, res) => {
