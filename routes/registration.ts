@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../utils/bcrypt';
 import { verifyEmail } from '../utils/verifyEmail';
+import { isXMLHeader, xmlResponse } from '../middleware/xmlResponse';
 
 
 const prisma = new PrismaClient();
@@ -30,8 +31,16 @@ registrationRoute.post('/', async (req,res) => {
 				lastName,
 				password: await hashPassword(password),
 			}
-		})
-		res.status(200).json({ response: 'User has been registered successfully', email: user.email });
+		});
+
+		const responseObject = {response: 'User has been registered successfully', email: user.email};
+
+		if (isXMLHeader(req)) {
+			xmlResponse(res, responseObject, 200);
+		} else {
+			res.status(200).json(responseObject);
+		}
+
 	} catch (error) {
 		res.status(500).json({ errorMessage: 'An error has occurred, user has not been registered', error: error });
 	}

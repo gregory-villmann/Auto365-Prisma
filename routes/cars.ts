@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { auth } from '../middleware/auth';
-import xml2js from 'xml2js';
 import { requestLogger } from '../middleware/requestLogger';
+import { isXMLHeader, xmlResponse } from '../middleware/xmlResponse';
 
 const prisma = new PrismaClient();
 export const carsRoute = Router();
@@ -25,18 +25,15 @@ carsRoute.get('/', async (req, res) => {
 			skip,
 			take: Number(pageSize),
 		});
-		const acceptHeader = req.headers.accept || '';
-		if (acceptHeader.includes('application/xml') || acceptHeader.includes('text/xml')) {
+
+		if (isXMLHeader(req)) {
 			const xmlCars = {
 				cars: {
 					car: cars
 				},
 				size: carsLength
 			};
-			const builder = new xml2js.Builder();
-			const xml = builder.buildObject(xmlCars);
-			res.set('Content-Type', 'application/xml');
-			res.send(xml);
+			xmlResponse(res, xmlCars, 200);
 		} else {
 			res.status(200).json({cars: cars, size: carsLength});
 		}
@@ -60,14 +57,10 @@ carsRoute.get('/:id', async (req, res) => {
 		if (!car) {
 			res.status(404).json({ error: 'Car not found' });
 		} else {
-			const acceptHeader = req.headers.accept || '';
-			if (acceptHeader.includes('application/xml') || acceptHeader.includes('text/xml')) {
-				const builder = new xml2js.Builder();
-				const xml = builder.buildObject(car);
-				res.set('Content-Type', 'application/xml');
-				res.send(xml);
+			if (isXMLHeader(req)) {
+				xmlResponse(res, car, 200);
 			} else {
-				res.json(car);
+				res.status(200).json(car);
 			}
 		}
 	} catch (error) {
@@ -76,7 +69,7 @@ carsRoute.get('/:id', async (req, res) => {
 	}
 });
 
-// POST /cars/new - create a new car
+// POST /cars - create a new car
 carsRoute.post('', auth, requestLogger, async (req, res) => {
 	const {make, model, year, mileage, price, image} = req.body;
 
@@ -93,7 +86,11 @@ carsRoute.post('', auth, requestLogger, async (req, res) => {
 			},
 		});
 
-		res.status(201).json(car);
+		if (isXMLHeader(req)) {
+			xmlResponse(res, car, 201);
+		} else {
+			res.status(201).json(car);
+		}
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Internal server error' });
@@ -118,7 +115,11 @@ carsRoute.put('/:id', auth, requestLogger, async (req, res) => {
 			},
 		});
 
-		res.status(200).json(car)
+		if (isXMLHeader(req)) {
+			xmlResponse(res, car, 201);
+		} else {
+			res.status(201).json(car);
+		}
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Internal server error' });
@@ -132,8 +133,11 @@ carsRoute.delete('/:id', auth, requestLogger, async (req, res) => {
 		const deletedCar = await prisma.car.delete({
 			where: {id},
 		});
-
-		res.status(200).json(deletedCar);
+		if (isXMLHeader(req)) {
+			xmlResponse(res, deletedCar, 200);
+		} else {
+			res.status(200).json(deletedCar);
+		}
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({error: 'Internal server error'});

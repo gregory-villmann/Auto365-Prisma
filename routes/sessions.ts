@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { auth } from '../middleware/auth';
 import { isPasswordValid } from '../utils/verifyPassword';
 import { requestLogger } from '../middleware/requestLogger';
+import { isXMLHeader, xmlResponse } from '../middleware/xmlResponse';
 
 const prisma = new PrismaClient();
 export const sessionsRoute = Router();
@@ -36,7 +37,14 @@ sessionsRoute.post('/', requestLogger, async (req, res) => {
 					userId: user.id
 				}
 			});
-			res.status(200).json({firstName: user.firstName, uuid: 'Bearer ' + uuid});
+
+			let responseObject = {firstName: user.firstName, uuid: 'Bearer ' + uuid};
+
+			if (isXMLHeader(req)) {
+				xmlResponse(res, responseObject, 200);
+			} else {
+				res.status(200).json(responseObject);
+			}
 		}
 	} else {
 		res.status(500).json({errorMessage: 'Valideerimine ebaõnnestus'});
