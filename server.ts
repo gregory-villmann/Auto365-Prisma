@@ -28,7 +28,7 @@ server.use('/sessions', sessionsRoute);
 
 server.use((err, res) => {
     console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({error: 'Internal server error'});
 });
 
 const httpsServer = https.createServer(options, server);
@@ -36,3 +36,5 @@ const httpsServer = https.createServer(options, server);
 httpsServer.listen(3000, () => {
     console.log('Server has started https://localhost:3000');
 });
+
+import './websocketServer';

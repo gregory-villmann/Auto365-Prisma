@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { auth } from '../middleware/auth';
 import { requestLogger } from '../middleware/requestLogger';
 import { isXMLHeader, xmlResponse } from '../middleware/xmlResponse';
-
+import { io } from '../websocketServer';
 const prisma = new PrismaClient();
 export const carsRoute = Router();
 
@@ -91,6 +91,10 @@ carsRoute.post('', auth, requestLogger, async (req, res) => {
 		} else {
 			res.status(201).json(car);
 		}
+
+		const allCars = await prisma.car.findMany();
+		// emitting all cars to listeners
+		io.emit('carCreated', allCars);
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Internal server error' });
@@ -120,6 +124,9 @@ carsRoute.put('/:id', auth, requestLogger, async (req, res) => {
 		} else {
 			res.status(201).json(car);
 		}
+
+		// emitting to all listeners of specific car listeners
+		io.emit(`car/${car.id}`, car);
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Internal server error' });
