@@ -59,7 +59,7 @@ sessionsRoute.delete('', auth, requestLogger, async (req, res) => {
 				id: token
 			}
 		});
-		res.status(204);
+		res.status(204).send();
 	} catch (error) {
 		res.status(404).json({error});
 	}
