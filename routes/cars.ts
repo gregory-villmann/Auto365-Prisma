@@ -126,7 +126,7 @@ carsRoute.put('/:id', auth, requestLogger, async (req, res) => {
 		}
 
 		// emitting to all listeners of specific car listeners
-		io.emit(`car/${car.id}`, car);
+		io.emit('carUpdated', {id: car.id, car: car});
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Internal server error' });
@@ -145,6 +145,7 @@ carsRoute.delete('/:id', auth, requestLogger, async (req, res) => {
 		} else {
 			res.status(200).json(deletedCar);
 		}
+		io.emit('carDeleted', {id: deletedCar.id, car: deletedCar});
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({error: 'Internal server error'});
